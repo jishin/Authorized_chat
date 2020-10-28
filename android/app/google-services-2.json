@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "369720287413",
+    "firebase_url": "https://authorised-chat-app.firebaseio.com",
+    "project_id": "authorised-chat-app",
+    "storage_bucket": "authorised-chat-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369720287413:android:e5b18146d416a052861efc",
+        "android_client_info": {
+          "package_name": "com.jish.authorised_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "369720287413-op44bvlt616pn7qqr9p87oek6bdmm4at.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLYhcqMSlETLRSN4udtz6J3CPGD7aabGQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "369720287413-op44bvlt616pn7qqr9p87oek6bdmm4at.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
