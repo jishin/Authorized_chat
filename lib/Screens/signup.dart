@@ -1,3 +1,4 @@
+import 'package:authorised_chat/services/auth.dart';
 import 'package:authorised_chat/widget.dart';
 import 'package:flutter/material.dart';
 
@@ -7,17 +8,42 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  
+  bool isLoading = false;
+
+  AuthMethod authMethods = new AuthMethod();
+
+  final formKey = GlobalKey<FormState>();
 
   TextEditingController userNameTextEditingController = new TextEditingController();
   TextEditingController emailTextEditingController = new TextEditingController();
   TextEditingController passwordTextEditingController = new TextEditingController();
+
+  signMeUp(){
+    if(formKey.currentState.validate()){
+      setState(() {
+        isLoading = true;
+      });
+
+      authMethods.signUpWithEmailAndPassword(emailTextEditingController.text, passwordTextEditingController.text).then((val){
+        print("${val.uid}");
+
+        Navigator.pushReplacement(context, MaterialPageRoute(
+            builder: (context) =>
+        ))
+      });
+
+    }
+  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBarMain("Sign Up"),
-      body: SingleChildScrollView(
+      body: isLoading ? Container(
+        child: Center(child: CircularProgressIndicator()),
+      ):SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height-50,
           alignment: Alignment.bottomCenter,
@@ -27,21 +53,40 @@ class _SignUpState extends State<SignUp> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
-                    controller: userNameTextEditingController,
-                      style: simpleTextStyle(),
-                      decoration: textFieldInputDecoration("username")
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                            validator: (val){
+                              return val.isEmpty || val.length < 4 ? "Please provide a valid username": null ;
+                            },
+                            controller: userNameTextEditingController,
+                            style: simpleTextStyle(),
+                            decoration: textFieldInputDecoration("username")
+                        ),
+                        TextFormField(
+                            validator: (val){
+                              return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ?
+                              null : "Please provide a valid email";
+                            },
+                            controller: emailTextEditingController,
+                            style: simpleTextStyle(),
+                            decoration: textFieldInputDecoration("email")
+                        ),
+                        TextFormField(
+                            obscureText: true,
+                            validator: (val){
+                              return val.length > 6 ? null : "Please provide a valid password of 6 plus char";
+                            },
+                            controller: passwordTextEditingController,
+                            style: simpleTextStyle(),
+                            decoration: textFieldInputDecoration("password")
+                        ),
+                      ],
+                    ),
                   ),
-                  TextField(
-                    controller: emailTextEditingController,
-                      style: simpleTextStyle(),
-                      decoration: textFieldInputDecoration("email")
-                  ),
-                  TextField(
-                    controller: passwordTextEditingController,
-                      style: simpleTextStyle(),
-                      decoration: textFieldInputDecoration("password")
-                  ),
+
                   SizedBox(height: 10.0,),
                   Container(
                     alignment: Alignment.centerRight,
@@ -66,7 +111,10 @@ class _SignUpState extends State<SignUp> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
 
-                      onPressed: (){},
+                      onPressed: (){
+                        //TODO
+                        signMeUp();
+                      },
 
                       child: Text(
                         'Sing Un',
@@ -88,7 +136,9 @@ class _SignUpState extends State<SignUp> {
                         borderRadius: BorderRadius.circular(30.0),
                       ),
 
-                      onPressed: (){},
+                      onPressed: (){
+                        //TODO
+                      },
 
                       child: Text(
                         'Sing Un with google',
