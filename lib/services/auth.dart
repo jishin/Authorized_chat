@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:authorised_chat/modal/user.dart';
-import 'package:flutter/cupertino.dart';
 
 class AuthMethod{
 

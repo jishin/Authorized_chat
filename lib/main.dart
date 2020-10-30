@@ -1,7 +1,8 @@
+import 'package:authorised_chat/Screens/chatRoomsScreen.dart';
+import 'package:authorised_chat/helper/authenticate.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:authorised_chat/Screens/sign_in.dart';
-import 'package:authorised_chat/Screens/signup.dart';
+
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SignUp(),
+      //home: Authenticate(),
+      home: ChatRoom(),
     );
   }
 }

@@ -2,11 +2,21 @@ import 'package:authorised_chat/widget.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
+
+  final Function toggle;
+  SignIn(this.toggle);
+
   @override
   _SignInState createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
+
+  final formKey = GlobalKey<FormState>();
+  TextEditingController emailTextEditingController = new TextEditingController();
+  TextEditingController passwordTextEditingController = new TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,13 +31,30 @@ class _SignInState extends State<SignIn> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  TextField(
-                    style: simpleTextStyle(),
-                    decoration: textFieldInputDecoration("email")
-                  ),
-                  TextField(
-                      style: simpleTextStyle(),
-                    decoration: textFieldInputDecoration("password")
+                  Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                            validator: (val){
+                              return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(val) ?
+                              null : "Please provide a valid email";
+                            },
+                            controller: emailTextEditingController,
+                            style: simpleTextStyle(),
+                            decoration: textFieldInputDecoration("email")
+                        ),
+                        TextFormField(
+                            obscureText: true,
+                            validator: (val){
+                              return val.length > 6 ? null : "Please provide a valid password of 6 plus char";
+                            },
+                            controller: passwordTextEditingController,
+                            style: simpleTextStyle(),
+                            decoration: textFieldInputDecoration("password")
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 10.0,),
                   Container(
@@ -94,14 +121,22 @@ class _SignInState extends State<SignIn> {
                       Text("Don't have an account?",
                         style: simpleTextStyle(),
                       ),
-                      Text("Register now",
-                        style: TextStyle(
-                          color: Colors.grey[900],
-                          fontSize: 16,
-                          decoration: TextDecoration.underline,
-                        )
+                      GestureDetector(
+                        onTap: (){
+                          widget.toggle();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Text("Register now",
+                            style: TextStyle(
+                              color: Colors.grey[900],
+                              fontSize: 16,
+                              decoration: TextDecoration.underline,
+                            )
 
-                        ,
+                            ,
+                          ),
+                        ),
                       )
                     ],
                   ),
