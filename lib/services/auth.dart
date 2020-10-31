@@ -5,7 +5,7 @@ class AuthMethod{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  IUser _userFromFirebaseUser(FirebaseUser user){
+  IUser _userFromFirebaseUser(User user){
     return user != null ? IUser(userId: user.uid): null;
   }
 
@@ -13,11 +13,14 @@ class AuthMethod{
 
     try{
       UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      FirebaseUser firebaseUser= result.user;
+      User firebaseUser= result.user;
       return _userFromFirebaseUser(firebaseUser);
+      //return result;
+
 
     }catch(e){
       print(e);
+      print("hello ji");
     }
   }
 
@@ -25,7 +28,7 @@ class AuthMethod{
 
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
-      FirebaseUser firebaseUser= result.user;
+      User firebaseUser= result.user;
       return _userFromFirebaseUser(firebaseUser);
     }catch(e){
       print(e);

@@ -1,5 +1,11 @@
+import 'package:authorised_chat/helper/helperfunctions.dart';
+import 'package:authorised_chat/services/auth.dart';
+import 'package:authorised_chat/services/database.dart';
 import 'package:authorised_chat/widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import 'chatRoomsScreen.dart';
 
 class SignIn extends StatefulWidget {
 
@@ -13,8 +19,129 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
 
   final formKey = GlobalKey<FormState>();
+
+  AuthMethod authMethods = new AuthMethod();
+
+  DatabaseMethods databaseMethods = new DatabaseMethods();
   TextEditingController emailTextEditingController = new TextEditingController();
   TextEditingController passwordTextEditingController = new TextEditingController();
+
+
+  QuerySnapshot snapshotUserInfo;
+  bool isLoading = false;
+
+
+
+
+  signIn(){
+    if(formKey.currentState.validate()){
+
+
+      //HelperFunctions.saveUserNameSharedPreference(userNameTextEditingController.text);
+      HelperFunctions.saveUserEmailSharedPreference(emailTextEditingController.text);
+
+      databaseMethods.getUserByUserEmail(emailTextEditingController.text).then((val){
+        snapshotUserInfo=val;
+        HelperFunctions.saveUserNameSharedPreference(snapshotUserInfo.documents[0].data()["name"]);
+      });
+
+      //TODO function to get userDeatails
+      setState(() {
+        isLoading = true;
+      });
+
+
+
+      authMethods.signInWithEmailAndPassword(emailTextEditingController.text, passwordTextEditingController.text ).then((val){
+        if(val != null) {
+
+
+          HelperFunctions.saveUserLoggedInSharedPreference(true);
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => ChatRoom()
+          ));
+        }
+      });
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+ /* signIn() async {
+    if(formKey.currentState.validate()){
+      setState(() {
+        isLoading = true;
+      });
+
+      //HelperFunctions.saveUserNameSharedPreference(userNameTextEditingController.text);
+
+
+
+
+      //TODO function to get userDeatails
+
+
+
+
+      await authMethods.signInWithEmailAndPassword(emailTextEditingController.text, passwordTextEditingController.text ).then((val) async{
+        if(val != null) {
+
+          QuerySnapshot snapshotUserInfo = databaseMethods.getUserByUserEmail(emailTextEditingController.text);
+
+
+
+
+          HelperFunctions.saveUserLoggedInSharedPreference(true);
+          HelperFunctions.saveUserNameSharedPreference(snapshotUserInfo.documents[0].data()["name"]);
+          HelperFunctions.saveUserEmailSharedPreference(snapshotUserInfo.documents[0].data()["email"]);
+          //HelperFunctions.saveUserEmailSharedPreference(emailTextEditingController.text);
+
+          Navigator.pushReplacement(context, MaterialPageRoute(
+              builder: (context) => ChatRoom()
+          ));
+        }else {
+          setState(() {
+            isLoading = false;
+            //show snackbar
+          });
+        }
+      });
+    }
+  }
+
+  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   @override
@@ -80,7 +207,9 @@ class _SignInState extends State<SignIn> {
                           borderRadius: BorderRadius.circular(30.0),
                         ),
 
-                        onPressed: (){},
+                        onPressed: (){
+                          signIn();
+                        },
 
                         child: Text(
                           'Sing In',
