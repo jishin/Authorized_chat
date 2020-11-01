@@ -54,11 +54,14 @@ class _SearchScreenState extends State<SearchScreen> {
       List<String> users = [userName, Constans.myName];
       Map<String, dynamic> chatRoomMap = {
         "users": users,
-        "chatoomId": chatRoomId
+        "chatroomId": chatRoomId
+        //"chatoomId": chatRoomId
       };
       DatabaseMethods().createChatRoom(chatRoomId, chatRoomMap);
       Navigator.push(context, MaterialPageRoute(
-          builder: (context) => ConversationSacreen()
+          builder: (context) => ConversationSacreen(
+            chatRoomId
+          )
       ));
     }else{
       print("you cannot send yourself messages");
